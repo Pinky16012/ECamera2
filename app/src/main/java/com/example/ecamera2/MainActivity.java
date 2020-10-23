@@ -322,7 +322,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     //File myDir = new File(root ,System.currentTimeMillis()+".jpg");
                     byte[] bytes1 = bundle.getByteArray("bitmapByteArray");
                     long n = System.currentTimeMillis();
-                    File file = new File(root+ "/"+n+".jpg");
+                    File myDir = new File(root + "/saved_img");
+                    if(!myDir.exists()) myDir.mkdirs();
+                    File file = new File(myDir+"/"+n+".jpg");
                     OutputStream os = new FileOutputStream(file);
                     os.write(bytes1);
                     os.close();
