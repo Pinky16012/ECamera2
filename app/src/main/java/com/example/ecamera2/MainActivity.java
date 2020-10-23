@@ -113,11 +113,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     /*********************拍照按鈕*******************/
 
     /*********************開啟相簿按鈕(canvas)*******************/
-    private SurfaceView iSurfaceView;
     private SurfaceHolder iSurfaceHolder;
     /*********************開啟相簿按鈕*******************/
 
-   // private ImageButton btn_selectMode;  //選擇構圖模式
+    // private ImageButton btn_selectMode;  //選擇構圖模式
     private ImageView iv_show;      //顯示已拍好的照片
     private CameraManager mCameraManager;     //攝像頭管理器
     private Handler childHandler, mainHandler;
@@ -126,6 +125,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private CameraCaptureSession mCameraCaptureSession;
     private CameraDevice mCameraDevice;
     private Button b_re;    //回拍照畫面按鈕
+    private ImageButton album_btn;
 
     /*********************相簿照片*******************/
     Uri imgUri;
@@ -160,24 +160,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         iv_show = (ImageView) findViewById(R.id.iv_show_camera2_activity);   //拍照完顯示
         b_re = (Button) findViewById(R.id.repreview);       //回拍照畫面按鈕
         imv = (ImageView) findViewById(R.id.imgView);         //相簿點選照片顯示
+        album_btn = (ImageButton) findViewById(R.id.album_button);
+
 
         mSurfaceView = (SurfaceView) findViewById(R.id.surface_view_camera2_activity);
         bSurfaceView = (SurfaceView) findViewById(R.id.surfaceView_button);
-        iSurfaceView = (SurfaceView) findViewById(R.id.surfaceView_img);
+
 
         bSurfaceView.setOnClickListener(this);
-        iSurfaceView.setOnClickListener(this);
+        album_btn.setOnClickListener(this);
 
         mSurfaceHolder = mSurfaceView.getHolder();// 取得容器
         bSurfaceHolder = bSurfaceView.getHolder();// 取得容器
-        iSurfaceHolder = iSurfaceView.getHolder();// 取得容器
         p.setAntiAlias(true);					  // bSurfaceView設置白色設置畫筆的鋸齒效果。 true是去除。
         p.setColor(Color.WHITE);				 // bSurfaceView設置白色
         p1.setAntiAlias(true);
-        p1.setColor(Color.GRAY);				 // iSurfaceView設置灰色
+
         mSurfaceHolder.setKeepScreenOn(true);    // mSurfaceView添加回调
         bSurfaceHolder.setKeepScreenOn(true);   // bSurfaceView添加回调
-        iSurfaceHolder.setKeepScreenOn(true);    // iSurfaceView添加回调
+
 
         bSurfaceView.setZOrderMediaOverlay(true);
         bSurfaceView.getHolder().setFormat(PixelFormat.TRANSLUCENT);
@@ -208,33 +209,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
             }
         });
-        iSurfaceHolder.addCallback(new SurfaceHolder.Callback() {
 
-
-            @Override
-            public void surfaceCreated(SurfaceHolder holder) { //SurfaceView創建
-
-                canvas1 = holder.lockCanvas();
-                // 1.鎖住畫布
-                canvas1.drawRect(0, 210, 210, 0,p1);
-                // 2.在畫布上貼圖
-                holder.unlockCanvasAndPost(canvas1);
-                // 3.解鎖並PO出畫布
-            }
-
-            @Override
-            public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-            }
-
-            @Override
-            public void surfaceDestroyed(SurfaceHolder holder) { //SurfaceView銷毁
-                // 釋放Camera資源
-                if (null != mCameraDevice) {
-                    mCameraDevice.close();
-                    MainActivity.this.mCameraDevice = null;
-                }
-            }
-        });
         mSurfaceHolder.addCallback(new SurfaceHolder.Callback() {
 
 
@@ -272,7 +247,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mCameraDevice.close();
                 mSurfaceView.setVisibility(View.GONE);
                 bSurfaceView.setVisibility(View.GONE);
-                iSurfaceView.setVisibility(View.GONE);
+                album_btn.setVisibility(View.GONE);
                 //btn_selectMode.setVisibility(View.GONE);
                 imv.setVisibility(View.GONE);
                 b_re.setVisibility(View.VISIBLE);
@@ -453,7 +428,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.surfaceView_button:
                 takePicture();    //拍照
                 break;
-            case R.id.surfaceView_img:
+            case R.id.album_button:
                 onPick();     //開啟相簿
                 break;
 
@@ -462,7 +437,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void re_btn(View v){
         mSurfaceView.setVisibility(View.VISIBLE);
         bSurfaceView.setVisibility(View.VISIBLE);
-        iSurfaceView.setVisibility(View.VISIBLE);
+        album_btn.setVisibility(View.VISIBLE);
         //btn_selectMode.setVisibility(View.VISIBLE);
         b_re.setVisibility(View.GONE);
         imv.setVisibility(View.GONE);
@@ -543,7 +518,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         mSurfaceView.setVisibility(View.GONE);
         bSurfaceView.setVisibility(View.GONE);
-        iSurfaceView.setVisibility(View.GONE);
+        album_btn.setVisibility(View.GONE);
         //btn_selectMode.setVisibility(View.GONE);
         iv_show.setVisibility(View.GONE);
         b_re.setVisibility(View.VISIBLE);

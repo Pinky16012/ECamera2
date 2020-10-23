@@ -28,21 +28,25 @@
         android:layout_below="@id/tab" />
 
     <SurfaceView
-            android:id="@+id/surfaceView_button"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_alignBottom="@id/surface_view_camera2_activity"
-            android:layout_centerHorizontal="true" />
+        android:id="@+id/surfaceView_button"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginBottom="10dp"
+        android:layout_alignBottom="@id/surface_view_camera2_activity"
+        android:layout_centerHorizontal="true" />
 
-        <SurfaceView
-            android:id="@+id/surfaceView_img"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_alignBottom="@id/surface_view_camera2_activity"
-            android:layout_centerHorizontal="false"
-            android:layout_marginLeft="30dp"
-            android:layout_marginBottom="15dp"
-            android:background="@drawable/bg_button"/>
+
+
+    <ImageButton
+        android:id="@+id/album_button"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignBottom="@id/surface_view_camera2_activity"
+        android:layout_centerHorizontal="false"
+        android:layout_marginLeft="20dp"
+        android:scaleType="fitStart"
+        android:background="#00000000"
+        app:srcCompat="@drawable/album_icon" />
 
     <ImageView
         android:id="@+id/iv_show_camera2_activity"
@@ -53,26 +57,26 @@
         android:scaleType="centerCrop"
         android:visibility="gone" />
 
-        <Button
-            android:id="@+id/repreview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerInParent="false"
-            android:layout_centerHorizontal="true"
-            android:onClick="re_btn"
-            android:text="拍照"
-            android:background="@drawable/bg_button"
-            android:visibility="gone" />
+    <Button
+        android:id="@+id/repreview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerInParent="false"
+        android:layout_centerHorizontal="true"
+        android:onClick="re_btn"
+        android:text="拍照"
+        android:background="@drawable/bg_button"
+        android:visibility="gone" />
 
-        <ImageView
-            android:id="@+id/imgView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_centerInParent="true"
-            android:onClick="onClick"
-            android:scaleType="centerCrop"
-            android:visibility="gone" />
+    <ImageView
+        android:id="@+id/imgView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:onClick="onClick"
+        android:scaleType="centerCrop"
+        android:visibility="gone" />
 
 
 </RelativeLayout>
