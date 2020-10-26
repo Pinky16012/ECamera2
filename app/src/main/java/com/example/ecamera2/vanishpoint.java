@@ -21,6 +21,7 @@ public class vanishpoint  {
 
 //    Mat img;                                //照片
     Mat lines;                              //記錄霍夫線
+    Mat copy_img;
 
     List<Point> filter_point;               //過濾後構成直線的兩個座標
     List<Point> pt_xy;                      //紀錄兩直線的交叉座標
@@ -35,6 +36,8 @@ public class vanishpoint  {
     //    主函式
     public double vanishpoint(Mat img)
     {
+        copy_img = img.clone();
+
 //        轉灰階
         Mat gray = new Mat();
         Imgproc.cvtColor(img, gray, Imgproc.COLOR_BGR2GRAY);
@@ -364,7 +367,7 @@ public class vanishpoint  {
 
 /***********************************************************************************************/
 //劃出框框
-/***********************************************************************************************/ 
+/***********************************************************************************************/
     public Mat draw_rec(Mat img)
     {
         //畫出算出來的中心點
@@ -587,6 +590,29 @@ public class vanishpoint  {
         return mindis;
     }
 
+/*********************************************************************/
+//回傳計算出的中心點
+/********************************************************************/
+    public Point getCalPoint()
+    {
+        return pt_xy.get(minNo_pt_xy);
+    }
+
+/*********************************************************************/
+//回傳目標區域圖
+/********************************************************************/
+    public Mat getTargetPic()
+    {
+        int picWidth = copy_img.width() / 8;
+        int picHeight = copy_img.height() / 8;
+
+        int rectx = copy_img.width() / 3;
+        int recty = copy_img.height() / 3;
+
+        Rect rect = new Rect(rectx, recty, picWidth, picHeight);
+        Mat pic = new Mat(copy_img, rect);
+        return pic;
+    }
 
 }
 
