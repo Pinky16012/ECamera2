@@ -26,6 +26,7 @@ public class Pager1 extends RelativeLayout{
     public Pager1(Context context) {
         super(context);
         context1 = context;
+
         LayoutInflater inflater = LayoutInflater.from(context);
         view = inflater.inflate(R.layout.my_pager1, null);//連接頁面
         ImageButton select_composition = view.findViewById(R.id.btn_selectMode);//取得頁面元件
