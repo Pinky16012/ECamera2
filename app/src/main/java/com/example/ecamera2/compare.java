@@ -43,4 +43,21 @@ public class compare {
 
         return new Mat(tem, rect);
     }
+
+    public Point moveOrigPoint(Bitmap temBitmap, Point checkPoint, Point origPoint){
+            Point Target = new Point();
+            Mat temMat = new Mat();
+            Utils.bitmapToMat(temBitmap, temMat);
+            int width = temMat.width();
+            int height = temMat.height();
+            double x = width/2; double y = height/2;
+            double differX = checkPoint.x - x;
+            double differY = checkPoint.y - y;
+
+            Target.x = origPoint.x +differX;
+            Target.y = origPoint.y +differY;
+
+
+        return Target;
+    }
 }
