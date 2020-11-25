@@ -85,6 +85,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             WindowManager.LayoutParams localLayoutParams = getWindow().getAttributes();
             localLayoutParams.flags = (WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS | localLayoutParams.flags);
         }
+
+
     }
     private void viewpager(){
         /*********************模式切換*******************/
@@ -105,13 +107,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
-                Toast.makeText(MainActivity.this, "Changed to page " + position, Toast.LENGTH_SHORT).show();
                 itemPosition = position;
                 if(itemPosition ==0){
                     selectMode_btn.setVisibility(View.GONE);
+                    selectPose_btn.setVisibility(View.GONE);
                 }else if(itemPosition == 1){
                     selectMode_btn.setVisibility(View.VISIBLE);
+                    selectPose_btn.setVisibility(View.GONE);
                 }else{
+                    selectPose_btn.setVisibility(View.VISIBLE);
                     selectMode_btn.setVisibility(View.GONE);
                 }
             }
@@ -149,6 +153,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private SurfaceHolder iSurfaceHolder;
     /*********************開啟相簿按鈕*******************/
 
+    private ImageButton selectPose_btn;  //選擇拍照姿勢
     private ImageButton selectMode_btn;  //選擇構圖模式
     private ImageView iv_show;      //顯示已拍好的照片
     private CameraManager mCameraManager;     //攝像頭管理器
@@ -195,7 +200,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         imv = (ImageView) findViewById(R.id.imgView);         //相簿點選照片顯示
         album_btn = (ImageButton) findViewById(R.id.album_button);
         selectMode_btn = (ImageButton) findViewById(R.id.btn_selectMode);
-
+        selectPose_btn = (ImageButton) findViewById(R.id.btn_selectPose);
 
         mSurfaceView = (SurfaceView) findViewById(R.id.surface_view_camera2_activity);
         bSurfaceView = (SurfaceView) findViewById(R.id.surfaceView_button);
@@ -344,10 +349,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Utils.bitmapToMat(bMapRotate,m,true);
 
                     if(itemPosition == 1){    //當是構圖模式
-                        new AlertDialog.Builder(MainActivity.this)
-                                .setTitle("YO")
-                                .setMessage("1111")
-                                .show();
                         Pager1 i = new Pager1(MainActivity.this);
                         i.selectMode(bMapRotate,m,selection,MainActivity.this);
                     }
