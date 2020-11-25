@@ -38,14 +38,15 @@
 
     <SurfaceView
         android:id="@+id/surfaceView_button"
-        android:layout_width="78dp"
-        android:layout_height="78dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_alignBottom="@id/surface_view_camera2_activity"
         android:background="@drawable/bbg_button"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="10dp" />
 
 
+    '
 
     <ImageButton
         android:id="@+id/btn_selectMode"
