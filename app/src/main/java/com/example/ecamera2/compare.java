@@ -17,12 +17,14 @@ import java.util.Arrays;
 public class compare {
 
     /*****************比對是否類似********************/
+    //sourceMat為目前拍的的圖片 templateMat為原本計算出來要比對的
     public boolean comparePic(Mat sourceMat, Mat templateMat, Point destination){
         boolean good = false;
 
         MatOfFloat ranges = new MatOfFloat(0f, 256f);
         MatOfInt histSize = new MatOfInt(1000);
 
+        sourceMat = pictureCut(sourceMat, destination);
         Imgproc.calcHist(Arrays.asList(sourceMat), new MatOfInt(0), new Mat(), sourceMat, histSize, ranges);
         Imgproc.calcHist(Arrays.asList(templateMat), new MatOfInt(0), new Mat(), templateMat, histSize, ranges);
         double res = Imgproc.compareHist(sourceMat, templateMat, Imgproc.CV_COMP_CORREL);
@@ -32,9 +34,8 @@ public class compare {
         return good;
     }
     /****************照片裁切*****************/
-    public Mat pictureCut(Bitmap tem_img, Point Center){
-        Mat tem = new Mat();
-        Utils.bitmapToMat(tem_img, tem);
+    public Mat pictureCut(Mat tem, Point Center){
+
         int[] point = new int[2];
         point[0] = (int) Center.x;
         point[1] = (int) Center.y;
