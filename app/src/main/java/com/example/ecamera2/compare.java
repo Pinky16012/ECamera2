@@ -64,7 +64,7 @@ public class compare {
     }
 
     /***************調整並繪上推薦框*************************/
-    //temMat為要畫的圖，checkPoint為推薦之目標，origPoint為原始找到的特徵點
+    //temMat為要畫的圖，checkPoint為推薦之目標點，origPoint為原始找到的特徵點
     public Mat drawRecoommandation(Mat temMat, Point checkPoint, Point origPoint){
 
         moveOrigPoint(temMat, checkPoint, origPoint);
