@@ -1,6 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:fitsSystemWindows="false"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
@@ -9,33 +10,68 @@
         android:id="@+id/tab"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:background="#000000"
         app:tabGravity="fill"
+        app:tabIndicatorColor="@android:color/white"
         app:tabMaxWidth="0dp"
-
-        app:tabMode="auto" />
+        app:tabMode="auto"
+        app:tabTextColor="@android:color/white" />
 
 
     <SurfaceView
         android:id="@+id/surface_view_camera2_activity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/tab" />
+        android:layout_below="@id/tab"
+        />
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/mViewPager"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tab" />
+        android:layout_below="@id/tab"
+         >
+
+    </androidx.viewpager.widget.ViewPager>
+
 
     <SurfaceView
         android:id="@+id/surfaceView_button"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_marginBottom="10dp"
         android:layout_alignBottom="@id/surface_view_camera2_activity"
-        android:layout_centerHorizontal="true" />
+        android:background="@drawable/bbg_button"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp" />
 
 
+    '
+
+    <ImageButton
+        android:id="@+id/btn_selectMode"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="5dp"
+        android:background="#00000000"
+        android:onClick="select"
+        android:scaleType="fitStart"
+        app:srcCompat="@drawable/selectmode_icon" />
+
+    <ImageButton
+        android:id="@+id/btn_selectPose"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="5dp"
+        android:background="#00000000"
+        android:scaleType="fitStart"
+        app:srcCompat="@drawable/selectmode_icon" />
 
     <ImageButton
         android:id="@+id/album_button"
@@ -44,8 +80,8 @@
         android:layout_alignBottom="@id/surface_view_camera2_activity"
         android:layout_centerHorizontal="false"
         android:layout_marginLeft="20dp"
-        android:scaleType="fitStart"
         android:background="#00000000"
+        android:scaleType="fitStart"
         app:srcCompat="@drawable/album_icon" />
 
     <ImageView
@@ -64,9 +100,10 @@
         android:layout_alignParentBottom="true"
         android:layout_centerInParent="false"
         android:layout_centerHorizontal="true"
+        android:background="@drawable/bg_button"
         android:onClick="re_btn"
         android:text="拍照"
-        android:background="@drawable/bg_button"
+        android:layout_marginBottom="5dp"
         android:visibility="gone" />
 
     <ImageView

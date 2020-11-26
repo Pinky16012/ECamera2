@@ -44,6 +44,7 @@ import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
@@ -64,9 +65,9 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    public int itemPosition = 0;
+    public int itemPosition =1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,13 +75,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);  //強制豎屏
         iniLoadOpenCV();
         initVIew();
+        viewpager();
+        setStatusBar();
 
+    }
+
+    private void setStatusBar(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            WindowManager.LayoutParams localLayoutParams = getWindow().getAttributes();
+            localLayoutParams.flags = (WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS | localLayoutParams.flags);
+        }
+
+
+    }
+    private void viewpager(){
         /*********************模式切換*******************/
         ArrayList<View> mPages = new ArrayList<>();
         mPages.add(new Pager0(this));
         mPages.add(new Pager1(this));
         mPages.add(new Pager2(this));
-
         ViewPager viewPager = findViewById(R.id.mViewPager);
         TabLayout tab = findViewById(R.id.tab);
         PagerAdapter1 myPagerAdapter = new PagerAdapter1();
@@ -88,11 +101,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tab.setupWithViewPager(viewPager);//將TabLayout綁定給ViewPager
         viewPager.setAdapter(myPagerAdapter);//綁定適配器
         viewPager.setCurrentItem(1);//指定跳到某頁，一定得設置在setAdapter後面
-        itemPosition = myPagerAdapter.currentPosition();   //未得到正確位置
         /*********************模式切換*******************/
+
+        /*********************取得目前頁碼*******************/
+        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                itemPosition = position;
+                if(itemPosition ==0){
+                    selectMode_btn.setVisibility(View.GONE);
+                    selectPose_btn.setVisibility(View.GONE);
+                }else if(itemPosition == 1){
+                    selectMode_btn.setVisibility(View.VISIBLE);
+                    selectPose_btn.setVisibility(View.GONE);
+                }else{
+                    selectPose_btn.setVisibility(View.VISIBLE);
+                    selectMode_btn.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
+        /*********************取得目前頁碼*******************/
     }
-
-
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
 
     static {
@@ -116,7 +153,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private SurfaceHolder iSurfaceHolder;
     /*********************開啟相簿按鈕*******************/
 
-    // private ImageButton btn_selectMode;  //選擇構圖模式
+    private ImageButton selectPose_btn;  //選擇拍照姿勢
+    private ImageButton selectMode_btn;  //選擇構圖模式
     private ImageView iv_show;      //顯示已拍好的照片
     private CameraManager mCameraManager;     //攝像頭管理器
     private Handler childHandler, mainHandler;
@@ -156,12 +194,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initVIew() {
-        //btn_selectMode = (ImageButton) findViewById(R.id.btn_selectMode);
+
         iv_show = (ImageView) findViewById(R.id.iv_show_camera2_activity);   //拍照完顯示
         b_re = (Button) findViewById(R.id.repreview);       //回拍照畫面按鈕
         imv = (ImageView) findViewById(R.id.imgView);         //相簿點選照片顯示
         album_btn = (ImageButton) findViewById(R.id.album_button);
-
+        selectMode_btn = (ImageButton) findViewById(R.id.btn_selectMode);
+        selectPose_btn = (ImageButton) findViewById(R.id.btn_selectPose);
 
         mSurfaceView = (SurfaceView) findViewById(R.id.surface_view_camera2_activity);
         bSurfaceView = (SurfaceView) findViewById(R.id.surfaceView_button);
@@ -235,6 +274,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void initCamera2() {
+
         HandlerThread handlerThread = new HandlerThread("Camera2");
         handlerThread.start();
         childHandler = new Handler(handlerThread.getLooper());
@@ -308,15 +348,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     iv_show.setImageBitmap(bMapRotate);
                     Utils.bitmapToMat(bMapRotate,m,true);
 
-                    if(itemPosition == 0){
-                        new AlertDialog.Builder(MainActivity.this)
-                                .setTitle("YO")
-                                .setMessage("1111")
-                                .show();
+                    if(itemPosition == 1){    //當是構圖模式
                         Pager1 i = new Pager1(MainActivity.this);
                         i.selectMode(bMapRotate,m,selection,MainActivity.this);
-                        //selectMode(bMapRotate,m);
                     }
+
                     /**************廣播****************/
                     Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
                     Uri uri = Uri.fromFile(file);
