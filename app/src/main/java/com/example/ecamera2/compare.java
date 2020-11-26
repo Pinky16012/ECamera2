@@ -9,11 +9,14 @@ import org.opencv.core.MatOfFloat;
 import org.opencv.core.MatOfInt;
 import org.opencv.core.Point;
 import org.opencv.core.Rect;
+import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 
 import java.util.Arrays;
 
 public class compare {
+
+    /*****************比對是否類似********************/
     public boolean comparePic(Mat sourceMat, Mat templateMat, Point destination){
         boolean good = false;
 
@@ -28,7 +31,7 @@ public class compare {
         }
         return good;
     }
-
+    /****************照片裁切*****************/
     public Mat pictureCut(Bitmap tem_img, Point Center){
         Mat tem = new Mat();
         Utils.bitmapToMat(tem_img, tem);
@@ -43,11 +46,10 @@ public class compare {
 
         return new Mat(tem, rect);
     }
-
-    public Point moveOrigPoint(Bitmap temBitmap, Point checkPoint, Point origPoint){
+    /*****************移動特徵點*****************/
+    public Point moveOrigPoint(Mat temMat, Point checkPoint, Point origPoint){
             Point Target = new Point();
-            Mat temMat = new Mat();
-            Utils.bitmapToMat(temBitmap, temMat);
+
             int width = temMat.width();
             int height = temMat.height();
             double x = width/2; double y = height/2;
@@ -57,7 +59,17 @@ public class compare {
             Target.x = origPoint.x +differX;
             Target.y = origPoint.y +differY;
 
-
         return Target;
+    }
+
+    /***************調整並繪上推薦框*************************/
+    //temMat為要畫的圖，checkPoint為推薦之目標，origPoint為原始找到的特徵點
+    public Mat drawRecoommandation(Mat temMat, Point checkPoint, Point origPoint){
+
+        moveOrigPoint(temMat, checkPoint, origPoint);
+        Imgproc.rectangle(temMat, new Point(origPoint.x + (temMat.width()/ 16), origPoint.y + (temMat.height()/ 16)), new Point(origPoint.x - (temMat.width()/ 16), origPoint.y - (temMat.height()/ 16)), new Scalar(0, 255, 255), 10);
+        Imgproc.rectangle(temMat, new Point(checkPoint.x + (temMat.width()/ 16), checkPoint.y + (temMat.height()/ 16)), new Point(checkPoint.x - (temMat.width()/ 16), checkPoint.y - (temMat.height()/ 16)), new Scalar(0, 0, 255), 10);
+
+        return temMat;
     }
 }
