@@ -13,8 +13,6 @@ public class Pager2 extends RelativeLayout {
 
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.my_pager2, null);//連接頁面
-        TextView textView = view.findViewById(R.id.textView3);//取得頁面元件
-        textView.setText("第33頁");
 
         addView(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         //將元件放入ViewPager

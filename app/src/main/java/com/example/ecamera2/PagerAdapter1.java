@@ -10,7 +10,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import java.util.List;
 
-public class PagerAdapter1 extends PagerAdapter implements ViewPager.OnPageChangeListener {
+public class PagerAdapter1 extends PagerAdapter {
     private List<View> mPager;//管理分頁陣列
     private int childCount = 0;//取得現在分頁位置
 
@@ -56,7 +56,6 @@ public class PagerAdapter1 extends PagerAdapter implements ViewPager.OnPageChang
         super.notifyDataSetChanged();
     }
 
-    private int currentPage;
 
 
     @Override
@@ -82,41 +81,4 @@ public class PagerAdapter1 extends PagerAdapter implements ViewPager.OnPageChang
     }
     /**再加入....↑*/
 
-    int currentPosition = 0;
-    @Override
-    public void onPageSelected(int pItem) {
-        // TODO Auto-generated method stub
-
-        switch (pItem) {
-
-            //如果是第一個頁面
-            case 0:
-                currentPosition = 0;
-                break;
-            //如果是第二個頁面
-            case 1:
-                currentPosition = 1;
-                break;
-            //如果是第三個頁面
-            case 2:
-                currentPosition = 3;
-                break;
-        }
-
-    }
-    public int currentPosition(){
-        return currentPosition;
-    }
-
-    @Override
-    public void onPageScrolled(int arg0, float arg1, int arg2) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void onPageScrollStateChanged(int arg0) {
-        // TODO Auto-generated method stub
-
-    }
 }
