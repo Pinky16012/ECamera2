@@ -175,4 +175,8 @@ public class RoThird {
     public Point returnOrigP(){
         return Center;
     }
+
+    public Mat returnMat(){
+        return tem_img;
+    }
 }
