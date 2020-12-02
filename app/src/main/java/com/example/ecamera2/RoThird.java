@@ -167,4 +167,12 @@ public class RoThird {
         Utils.matToBitmap(temMat, temBitmap);
         return temBitmap;
     }
+
+    public Point returnDistinationP(){
+        return checkPoint;
+    }
+
+    public Point returnOrigP(){
+        return Center;
+    }
 }
