@@ -595,10 +595,7 @@ public class vanishpoint  {
 /********************************************************************/
     public Point getCalPoint()
     {
-        Point target = new Point();
-        target.x = copy_img.width();
-        target.y = copy_img.height();
-        return target;
+        return pt_xy.get(minNo_pt_xy);
     }
 
 /*********************************************************************/
@@ -606,8 +603,8 @@ public class vanishpoint  {
 /********************************************************************/
     public Mat getTargetPic()
     {
-        int picWidth = (int)pt_xy.get(minNo_pt_xy).x - copy_img.width() / 16;
-        int picHeight = (int)pt_xy.get(minNo_pt_xy).y - copy_img.height() / 16;
+        int picWidth = copy_img.width() / 8;
+        int picHeight = copy_img.height() / 8;
 
         int rectx = copy_img.width() / 3;
         int recty = copy_img.height() / 3;
