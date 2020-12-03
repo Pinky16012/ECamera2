@@ -591,20 +591,23 @@ public class vanishpoint  {
     }
 
 /*********************************************************************/
-//回傳計算出的中心點
+//回傳照片中心
 /********************************************************************/
     public Point getCalPoint()
     {
-        return pt_xy.get(minNo_pt_xy);
+        Point target = new Point();
+        target.x = copy_img.width() / 2;
+        target.y = copy_img.height() / 2;
+        return target;
     }
 
 /*********************************************************************/
-//回傳目標區域圖
+//回傳找到的目標區域圖
 /********************************************************************/
     public Mat getTargetPic()
     {
-        int picWidth = copy_img.width() / 8;
-        int picHeight = copy_img.height() / 8;
+        int picWidth = (int)pt_xy.get(minNo_pt_xy).x - copy_img.width() / 16;
+        int picHeight = (int)pt_xy.get(minNo_pt_xy).y - copy_img.height() / 16;
 
         int rectx = copy_img.width() / 3;
         int recty = copy_img.height() / 3;
