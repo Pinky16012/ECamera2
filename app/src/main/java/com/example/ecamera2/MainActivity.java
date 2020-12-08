@@ -71,6 +71,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public int itemPosition =1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        getPermissions();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);  //強制豎屏
@@ -621,5 +622,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 })
                 .show();
         return selection;
+    }
+    private void getPermissions(){
+        if(ActivityCompat.checkSelfPermission(this,Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.CAMERA},1);
+        }
     }
 }
