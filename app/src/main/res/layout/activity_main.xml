@@ -57,7 +57,7 @@
         android:layout_marginRight="20dp"
         android:layout_marginBottom="5dp"
         android:background="#00000000"
-        android:onClick="select"
+        android:onClick="onClick"
         android:scaleType="fitStart"
         app:srcCompat="@drawable/selectmode_icon" />
 
@@ -71,6 +71,7 @@
         android:layout_marginBottom="5dp"
         android:background="#00000000"
         android:scaleType="fitStart"
+        android:visibility="gone"
         app:srcCompat="@drawable/selectmode_icon" />
 
     <ImageButton

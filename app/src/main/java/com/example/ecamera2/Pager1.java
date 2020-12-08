@@ -10,17 +10,26 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-
+import com.example.ecamera2.compare;
 
 import androidx.appcompat.app.AlertDialog;
 
 import org.opencv.android.Utils;
 import org.opencv.core.Mat;
+import org.opencv.core.Point;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Pager1 extends RelativeLayout{
-    String[] items={"強度平衡", "水平構圖","三分構圖","消失點構圖"};
-    boolean[] selection={false, false, false, false};
+    String[] items={"強度平衡", "水平構圖","三分構圖","消失點構圖","相框構圖"};
+    private int checkRecommend = 0;
     private Context context1;
+    private Mat template = new Mat();
+    private Point origP = new Point();
+    private Point DistinationP = new Point();
+
+    List<String> Score = new ArrayList<>();
     View view;
 
     public Pager1(Context context) {
@@ -42,9 +51,10 @@ public class Pager1 extends RelativeLayout{
     boolean horizontal;
     boolean third;
     boolean vp;
-    private int checkRecommend = 0;
+    boolean frame;
     private Bitmap recommendImg;
     private ImageView img_recommend;
+    boolean moveCorrect = false;
 
     public  String changeType(double a){
         int score = (int)a;
@@ -52,296 +62,152 @@ public class Pager1 extends RelativeLayout{
         return  score_string;
     }
 
-    public void selectMode(Bitmap bitmap, Mat img,boolean check[],Context context){
+    private int highestComposition = 0;
+    private double highest = 0.0;
+
+    public void selectMode(Bitmap bitmap, Mat img,boolean check[],Context context,int checkRecommend_){
         ib = check[0];
         horizontal = check[1];
         third = check[2];
         vp = check[3];
-
+        frame = check[4];
+        checkRecommend = checkRecommend_;
+        String nameofcom = new String();
         final IB i = new IB();
         final horizontal h = new horizontal();
         final RoThird r = new RoThird();
         final vanishpoint v = new vanishpoint();
-
-        int highestComposition = 0;
-        double highest;
-
-        Double IBscore = 0.0;
-        Double VPscore = 0.0;
-        Double Hscore = 0.0;
-        Double Rscore = 0.0;
-
-        String SIBscore = null;
-        String SVPscore = null;
-        String SHscore = null;
-        String SRscore = null;
-
-        if(vp && horizontal && third){
-            if(ib){
-                IBscore = i.getIBscore(bitmap);
-                SIBscore = changeType(IBscore);
-            }
-            Rscore = r.rotMain(bitmap);
-            VPscore = v.vanishpoint(img);
-            Hscore = h.horizontal_composition(bitmap);
+        //宣告frame
 
 
-            if(Hscore < VPscore){
 
-                if(Rscore < VPscore){
-                    highestComposition = 2;  //設消失點構圖分數最高
-                    highest = VPscore;
+        Double score[] ={0.0,0.0,0.0,0.0,0.0};
+//        Double IBscore = 0.0;
+//        Double Hscore = 0.0;
+//        Double Rscore = 0.0;
+//        Double VPscore = 0.0;
+//        Double Fscore = 0.0;
+
+        String SScore[] = {null,null,null,null,null};
+//        String SIBscore = null;
+//        String SHscore = null;
+//        String SRscore = null;
+//        String SVPscore = null;
+//        String SFscore = null;
+
+        if(checkRecommend == 0){
+            new AlertDialog.Builder(context)
+                    .setTitle("checkRecommend == 0")
+                    .setMessage("0")
+                    .show();
+            for(int a = 0;a <=4 ;a++){   //得到分數
+                if(check[a] == true){
+                    if(a == 0){
+                        score[0] = i.getIBscore(bitmap);
+                        SScore[0] = changeType(score[0]);
+                        nameofcom = "強度平衡:" + SScore[0];
+                        Score.add(nameofcom);
+                    }else if(a == 1){
+                        score[1] = h.horizontal_composition(bitmap);
+                        SScore[1] = changeType(score[1]);
+                        nameofcom = "水平構圖:" + SScore[1];
+                        Score.add(nameofcom);
+                    }else if(a == 2){
+                        score[2] = r.rotMain(bitmap);
+                        SScore[2] = changeType(score[2]);
+                        nameofcom = "三分構圖:" + SScore[2];
+                        Score.add(nameofcom);
+                    }else if(a == 3){
+                        score[3] = v.vanishpoint(img);
+                        SScore[3] = changeType(score[3]);
+                        nameofcom = "消失點構圖:" + SScore[3];
+                        Score.add(nameofcom);
+
+                    }else if(a == 4){
+//                        score[4] = i.getIBscore(bitmap); //改為frame
+//                        SScore[4] = changeType(score[4]);
+                    }
+                }else{
+                    SScore[a] = " ";
                 }
-                else{
-                    highestComposition = 1;  //設三分構圖分數最高
-                    highest = Rscore;
-                }
-            }else{
-                if(Rscore < Hscore){
-                    highestComposition = 3;  //設水平構圖分數最高
-                    highest = Hscore;
-                }
-                else{
-                    highestComposition = 1;  //設三分構圖分數最高
-                    highest = Rscore;
-                }
-
             }
 
-            SRscore = changeType(Rscore);
-            SVPscore = changeType(VPscore);
-            SHscore = changeType(Hscore);
-
-            if(ib){
-                new AlertDialog.Builder(context)
-                        .setTitle("分數")
-                        .setMessage("強度平衡"+SIBscore+"\n"+
-                                "三分構圖"+SRscore+"\n"+
-                                "消失點構圖"+SVPscore+"\n"+
-                                "水平構圖"+SHscore)
-                        .show();
-            }else{
-                new AlertDialog.Builder(context)
-                        .setTitle("分數")
-                        .setMessage("三分構圖"+SRscore+"\n"+
-                                "消失點構圖"+SVPscore+"\n"+
-                                "水平構圖"+SHscore)
-                        .show();
+            //顯示分數
+            String finalScore = "您的構圖分數\n";
+            for(int j = 0; j < Score.size(); j++) {
+                finalScore = finalScore + Score.get(j) + "\n";
             }
-
-
-            selectRecommend(highestComposition,highest,bitmap,img,context);
-
-        }
-        else if(vp && horizontal ){
-            if(ib){
-                IBscore = i.getIBscore(bitmap);
-                SIBscore = changeType(IBscore);
-            }
-            VPscore = v.vanishpoint(img);
-            Hscore = h.horizontal_composition(bitmap);
-
-            highestComposition = 2;   //消失點構圖最高分
-            highest = VPscore;
-            if(VPscore < Hscore){
-                highestComposition = 3;  //水平構圖最高分
-                highest = Hscore;
-            }
-
-            SVPscore = changeType(VPscore);
-            SHscore = changeType(Hscore);
-
-            if(ib){
-                new AlertDialog.Builder(context)
-                        .setTitle("分數")
-                        .setMessage("強度平衡"+SIBscore+"\n"+
-                                "消失點構圖"+SVPscore+"\n"+
-                                "水平構圖"+SHscore)
-                        .show();
-            }else{
-                new AlertDialog.Builder(context)
-                        .setTitle("分數")
-                        .setMessage("消失點構圖"+SVPscore+"\n"+
-                                "水平構圖"+SHscore)
-                        .show();
-            }
-
-
-            selectRecommend(highestComposition,highest,bitmap,img,context);
-
-        }else if(vp && third){
-            if(ib){
-                IBscore = i.getIBscore(bitmap);
-                SIBscore = changeType(IBscore);
-            }
-            Rscore = r.rotMain(bitmap);
-            VPscore = v.vanishpoint(img);
-
-            highestComposition = 1;   //三分構圖最高分
-            highest = Rscore;
-            if(Rscore < VPscore){
-                highestComposition = 2;  //消失點構圖最高分
-                highest = VPscore;
-            }
-
-            SRscore = changeType(Rscore);
-            SVPscore = changeType(VPscore);
-
-            if(ib){
-                new AlertDialog.Builder(context)
-                        .setTitle("分數")
-                        .setMessage("強度平衡"+SIBscore+"\n"+
-                                "三分構圖"+SRscore+"\n"+
-                                "消失點構圖"+SVPscore)
-                        .show();
-
-            }else{
-                new AlertDialog.Builder(context)
-                        .setTitle("分數")
-                        .setMessage("三分構圖"+SRscore+"\n"+
-                                "消失點構圖"+SVPscore)
-                        .show();
-            }
-
-
-            selectRecommend(highestComposition,highest,bitmap,img,context);
-
-        }else if(horizontal && third){
-            if(ib){
-                IBscore = i.getIBscore(bitmap);
-                SIBscore = changeType(IBscore);
-            }
-            Rscore = r.rotMain(bitmap);
-            Hscore = h.horizontal_composition(bitmap);
-
-            highestComposition = 1;   //三分構圖最高分
-            highest = Rscore;
-            if(Rscore < Hscore){
-                highestComposition = 3;  //水平構圖最高分
-                highest = Hscore;
-            }
-
-            SRscore = changeType(Rscore);
-            SHscore = changeType(Hscore);
-
-            if(ib){
-                new AlertDialog.Builder(context)
-                        .setTitle("分數")
-                        .setMessage("強度平衡"+SIBscore+"\n"+
-                                "三分構圖"+SRscore+"\n"+
-                                "水平構圖"+SHscore)
-                        .show();
-            }else{
-                new AlertDialog.Builder(context)
-                        .setTitle("分數")
-                        .setMessage("三分構圖"+SRscore+"\n"+
-                                "水平構圖"+SHscore)
-                        .show();
-            }
-
-
-            selectRecommend(highestComposition,highest,bitmap,img,context);
-
-
-
-        }else if(third){
-            if(ib){
-                IBscore = i.getIBscore(bitmap);
-                SIBscore = changeType(IBscore);
-            }
-            Rscore = r.rotMain(bitmap);
-
-            highest = Rscore;
-            highestComposition = 1;
-
-            SRscore = changeType(Rscore);
-
-            if(ib){
-                new AlertDialog.Builder(context)
-                        .setTitle("分數")
-                        .setMessage("強度平衡"+SIBscore+"\n"+
-                                "三分構圖"+SRscore)
-                        .show();
-            }else{
-                new AlertDialog.Builder(context)
-                        .setTitle("分數")
-                        .setMessage("三分構圖"+SRscore)
-                        .show();
-            }
-
-
-
-            selectRecommend(highestComposition,highest,bitmap,img,context);
-
-
-        }else if(horizontal){
-            if(ib){
-                IBscore = i.getIBscore(bitmap);
-                SIBscore = changeType(IBscore);
-            }
-            Hscore = h.horizontal_composition(bitmap);
-
-            highest = Hscore;
-            highestComposition = 3;
-
-            SHscore = changeType(Hscore);
-
-            if(ib){
-                new AlertDialog.Builder(context)
-                        .setTitle("分數")
-                        .setMessage("強度平衡"+SIBscore+"\n"+
-                                "水平構圖"+SHscore)
-                        .show();
-            }else{
-                new AlertDialog.Builder(context)
-                        .setTitle("分數")
-                        .setMessage("水平構圖"+SHscore)
-                        .show();
-            }
-
-
-            selectRecommend(highestComposition,highest,bitmap,img,context);
-
-
-        }else if(vp){
-            if(ib){
-                IBscore = i.getIBscore(bitmap);
-                SIBscore = changeType(IBscore);
-            }
-            VPscore = v.vanishpoint(img);
-
-            highest = VPscore;
-            highestComposition = 2;
-
-            SVPscore = changeType(VPscore);
-
-            if(ib){
-                new AlertDialog.Builder(context)
-                        .setTitle("分數")
-                        .setMessage("強度平衡"+SIBscore+"\n"+
-                                "消失點構圖"+SVPscore)
-                        .show();
-            }else{
-                new AlertDialog.Builder(context)
-                        .setTitle("分數")
-                        .setMessage("消失點構圖"+SVPscore)
-                        .show();
-            }
-
-
-
-            selectRecommend(highestComposition,highest,bitmap,img,context);
-        }else if(ib){
-            IBscore = i.getIBscore(bitmap);
-            SIBscore = changeType(IBscore);
+            Score.clear();
             new AlertDialog.Builder(context)
                     .setTitle("分數")
-                    .setMessage("強度平衡"+SIBscore)
+                    .setMessage(finalScore)
                     .show();
+
+            //選擇高分的
+            if(check[1] || check[2] || check[3] || check[4]){
+                if (score[1] < score[2]){
+                    if(score[2] < score[3]){
+                        if(score[3] < score[4]){
+                            highestComposition = 4;
+                            highest = score[4];
+                        }else{
+                            highestComposition = 3;
+                            highest = score[3];
+                        }
+                    }else if(score[2] > score[3]){
+                        if(score[2] < score[4]){
+                            highestComposition = 4;
+                            highest = score[4];
+                        }else{
+                            highestComposition = 2;
+                            highest = score[2];
+                        }
+                    }
+                }else if(score[1] > score[2]){
+                    if(score[1] < score[3]){
+                        if(score[3] < score[4]){
+                            highestComposition = 4;
+                            highest = score[4];
+                        }else{
+                            highestComposition = 3;
+                            highest = score[3];
+                        }
+                    }else if (score[1] > score[3]){
+                        if(score[1] < score[4]){
+                            highestComposition = 4;
+                            highest = score[4];
+                        }else{
+                            highestComposition = 1;
+                            highest = score[1];
+                        }
+                    }
+                }
+                //推薦
+
+            }
+            if(check[0] == true && check[1] == false && check[2] == false && check[3] == false && check[4] == false){
+                checkRecommend = 0;
+            }
         }
 
+        if(checkRecommend == 1){
+//            i.getIBscore(bitmap);
+//            h.horizontal_composition(bitmap);
+//            r.rotMain(bitmap);
+//            v.vanishpoint(img);
+            //frame
+            selectRecommend(highestComposition,highest,bitmap,img,context);
+        }else
+            selectRecommend(highestComposition,highest,bitmap,img,context);
 
-
+//        if(checkRecommend == 1){
+//            i.getIBscore(bitmap);
+//            h.horizontal_composition(bitmap);
+//            r.rotMain(bitmap);
+//            v.vanishpoint(img);
+//            //frame
+//            selectRecommend(highestComposition,highest,bitmap,img,context);
+//        }
     }
 
     public void selectRecommend(int a,double score,Bitmap bitmap1,Mat img1,Context context){
@@ -349,37 +215,78 @@ public class Pager1 extends RelativeLayout{
         final horizontal h = new horizontal();
         final RoThird r = new RoThird();
         final vanishpoint v = new vanishpoint();
+//        final compare c = new compare();
+        if(checkRecommend == 1){
+            //判斷移動相機是否正確
+            if(a == 1){   //水平構圖
 
-        if(score>=95){
+            }else if(a == 2){   //三分構圖
+                Mat tem_img = new Mat();
+                Utils.bitmapToMat(bitmap1, tem_img);
+                Mat template2 = new Mat();
+                template2 = compare.pictureCut(template, origP);
+                moveCorrect = compare.comparePic(img1,template2,DistinationP);
+
+            }else if(a == 3){  //消失點
+                Mat template2 = new Mat();
+                template2 = compare.pictureCut(template, origP);
+                moveCorrect = compare.comparePic(img1,template2,DistinationP);
+
+            }
+        }
+
+        if(score >= 95 && checkRecommend == 0){
             checkRecommend = 0;
+            moveCorrect = false;
             new AlertDialog.Builder(context)
                     .setTitle("恭喜!")
                     .setMessage("這是一張符合構圖的照片")
                     .show();
-        }else{
-
+        }else if(checkRecommend == 1 && moveCorrect == true){
+            checkRecommend = 0;
+            moveCorrect = false;
+            new AlertDialog.Builder(context)
+                    .setTitle("恭喜!")
+                    .setMessage("這是一張符合構圖的照片11111")
+                    .show();
+        }else if (checkRecommend == 1 && moveCorrect == false){
+            new AlertDialog.Builder(context)
+                    .setTitle("移動構圖")
+                    .setMessage("11111")
+                    .show();
+        }
+        else if(checkRecommend == 0){
             if(a == 1){
+
+                if(checkRecommend == 0){
+                    h.horizontal_composition(bitmap1);
+                    recommendImg = h.recommend(bitmap1); //水平構圖
+                }
+            }else if(a == 2){
                 if(checkRecommend == 0){
                     r.rotMain(bitmap1);
                     recommendImg = r.recommend(bitmap1); //三分構圖
+                    template = r.returnMat();
+                    origP = r.returnOrigP();
+                    DistinationP= r.returnDistinationP();
                 }
-            }else if(a == 2){
+            }else if(a == 3){
                 if(checkRecommend == 0){
                     v.vanishpoint(img1);
                     Mat z = new Mat();
                     z = v.draw_rec(img1);
                     Utils.matToBitmap(z, bitmap1);
                     recommendImg = bitmap1;
+                    template = v.getTargetPic();
+                    origP = v.getOrigP();
+                    DistinationP= v.getCalPoint();
                 }
 
-            }else if(a == 3){
-
-                if(checkRecommend == 0){
-                    h.horizontal_composition(bitmap1);
-                    recommendImg = h.recommend(bitmap1); //水平構圖
-                }
             }
             checkRecommend = 1;
         }
+    }
+    public int getCheckRecommendValue(){
+        return checkRecommend;
     }
 }

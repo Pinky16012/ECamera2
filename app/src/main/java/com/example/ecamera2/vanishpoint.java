@@ -68,7 +68,8 @@ public class vanishpoint  {
 
         minNo_pt_xy = cal_xy_abc_mindistance();   //找出這些交叉點中，哪一個座標距離所有直線的距離和最小
 
-        img = draw_rec(img);
+
+        //img = draw_rec(img);
 
         img = cal_7point(img);               //找出這些交叉點中，哪一個座標距離所有直線的距離和最小
 
@@ -396,7 +397,7 @@ public class vanishpoint  {
 /***********************************************************************************************/
     public Mat cal_7point(Mat img)
     {
-        Imgproc.circle(img, pt_xy.get(minNo_pt_xy), 2, new Scalar(255,0,0), 2);
+//        Imgproc.circle(img, pt_xy.get(minNo_pt_xy), 2, new Scalar(255,0,0), 2);
 
         //取的照片的長寬
         double img_w = img.size().width;
@@ -606,15 +607,19 @@ public class vanishpoint  {
 /********************************************************************/
     public Mat getTargetPic()
     {
-        int picWidth = (int)pt_xy.get(minNo_pt_xy).x - copy_img.width() / 16;
-        int picHeight = (int)pt_xy.get(minNo_pt_xy).y - copy_img.height() / 16;
+//        int picWidth = (int)pt_xy.get(minNo_pt_xy).x - copy_img.width() / 16;
+//        int picHeight = (int)pt_xy.get(minNo_pt_xy).y - copy_img.height() / 16;
+//
+//        int rectx = copy_img.width() / 3;
+//        int recty = copy_img.height() / 3;
+//
+//        Rect rect = new Rect(rectx, recty, picWidth, picHeight);
+//        Mat pic = new Mat(copy_img, rect);
+        return copy_img;
+    }
 
-        int rectx = copy_img.width() / 3;
-        int recty = copy_img.height() / 3;
-
-        Rect rect = new Rect(rectx, recty, picWidth, picHeight);
-        Mat pic = new Mat(copy_img, rect);
-        return pic;
+    public Point getOrigP(){
+        return pt_xy.get(minNo_pt_xy);
     }
 
 }

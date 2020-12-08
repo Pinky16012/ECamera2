@@ -18,7 +18,7 @@ public class compare {
 
     /*****************比對是否類似********************/
     //sourceMat為目前拍的的圖片 templateMat為原本計算出來要比對的
-    public boolean comparePic(Mat sourceMat, Mat templateMat, Point destination){
+    public static boolean comparePic(Mat sourceMat, Mat templateMat, Point destination){
         boolean good = false;
 
         MatOfFloat ranges = new MatOfFloat(0f, 256f);
@@ -34,7 +34,7 @@ public class compare {
         return good;
     }
     /****************照片裁切*****************/
-    public Mat pictureCut(Mat tem, Point Center){
+    public static Mat pictureCut(Mat tem, Point Center){
 
         int[] point = new int[2];
         point[0] = (int) Center.x;
@@ -42,8 +42,16 @@ public class compare {
 
         int disHeight = 480;
         int disWidth = 270;
-
-        Rect rect = new Rect(point[0] - disWidth/2, point[1] - disHeight/2, disWidth, disHeight);
+        Rect rect;
+        if(point[0] < 0|| point[1] < 0)
+            rect = new Rect(0, 0,disWidth, disHeight);
+        else if((point[0] - disWidth/2 ) < 0|| (point[1] - disHeight/2 ) <0)
+            rect = new Rect(point[0], point[1], disWidth , disHeight);
+        else if ((point[0] + disWidth/2 ) > tem.width()|| (point[1] + disHeight/2 ) > tem.height())
+            rect = new Rect(tem.width() -disWidth -1,tem.height() - disHeight -1, disWidth, disHeight);
+        else
+            rect = new Rect(point[0] - disWidth/2, point[1] - disHeight/2, disWidth, disHeight);
+//        Mat result = new Mat(tem, rect);
 
         return new Mat(tem, rect);
     }
