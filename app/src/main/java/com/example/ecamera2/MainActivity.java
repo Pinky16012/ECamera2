@@ -56,6 +56,7 @@ import com.google.android.material.tabs.TabLayout;
 import org.opencv.android.OpenCVLoader;
 import org.opencv.android.Utils;
 import org.opencv.core.Mat;
+import org.opencv.core.Point;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -74,8 +75,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);  //強制豎屏
         iniLoadOpenCV();
-        initVIew();
         viewpager();
+        initVIew();
+
         setStatusBar();
 
     }
@@ -143,7 +145,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private SurfaceView mSurfaceView;
     private SurfaceHolder mSurfaceHolder;
     /*********************拍照畫面*******************/
-
+    private int checkRecommend = 0 ;
     /*********************拍照按鈕(canvas)*******************/
     private SurfaceView bSurfaceView;
     private SurfaceHolder bSurfaceHolder;
@@ -152,6 +154,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     /*********************開啟相簿按鈕(canvas)*******************/
     private SurfaceHolder iSurfaceHolder;
     /*********************開啟相簿按鈕*******************/
+
+    /*********************選擇模式按鈕*******************/
+    String[] items={"強度平衡", "水平構圖","三分構圖","消失點構圖","相框構圖"};
+    boolean[] selection={false, false, false, false,false};
+    /*********************選擇模式按鈕*******************/
 
     private ImageButton selectPose_btn;  //選擇拍照姿勢
     private ImageButton selectMode_btn;  //選擇構圖模式
@@ -164,6 +171,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private CameraDevice mCameraDevice;
     private Button b_re;    //回拍照畫面按鈕
     private ImageButton album_btn;
+
+    private Pager1 i ;
 
     /*********************相簿照片*******************/
     Uri imgUri;
@@ -182,6 +191,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Canvas canvas1 = new Canvas(bitmap2);  // 畫布
     Paint p1 = new Paint();
     /*********************相簿畫布(canvas)*******************/
+
 
     private String CV_TAG = "OpenCV";
     private void iniLoadOpenCV() {
@@ -208,6 +218,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         bSurfaceView.setOnClickListener(this);
         album_btn.setOnClickListener(this);
+        selectMode_btn.setOnClickListener(this);
 
         mSurfaceHolder = mSurfaceView.getHolder();// 取得容器
         bSurfaceHolder = bSurfaceView.getHolder();// 取得容器
@@ -248,7 +259,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
             }
         });
-
         mSurfaceHolder.addCallback(new SurfaceHolder.Callback() {
 
 
@@ -271,6 +281,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
             }
         });
+        i = new Pager1(MainActivity.this);
     }
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void initCamera2() {
@@ -288,7 +299,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mSurfaceView.setVisibility(View.GONE);
                 bSurfaceView.setVisibility(View.GONE);
                 album_btn.setVisibility(View.GONE);
-                //btn_selectMode.setVisibility(View.GONE);
+//                btn_selectMode.setVisibility(View.GONE);
                 imv.setVisibility(View.GONE);
                 b_re.setVisibility(View.VISIBLE);
                 iv_show.setVisibility(View.VISIBLE);
@@ -334,7 +345,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     /*********************存照片and判斷構圖分數*******************/
 
                     String root = Environment.getExternalStorageDirectory().toString();
-                    //File myDir = new File(root ,System.currentTimeMillis()+".jpg");
                     byte[] bytes1 = bundle.getByteArray("bitmapByteArray");
                     long n = System.currentTimeMillis();
                     File myDir = new File(root + "/saved_img");
@@ -349,8 +359,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Utils.bitmapToMat(bMapRotate,m,true);
 
                     if(itemPosition == 1){    //當是構圖模式
-                        Pager1 i = new Pager1(MainActivity.this);
-                        i.selectMode(bMapRotate,m,selection,MainActivity.this);
+
+                        i.selectMode(bMapRotate,m,selection,MainActivity.this,checkRecommend);
+                        checkRecommend = i.getCheckRecommendValue();
                     }
 
                     /**************廣播****************/
@@ -466,6 +477,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.album_button:
                 onPick();     //開啟相簿
+                break;
+            case R.id.btn_selectMode:
+                select();
                 break;
 
         }
@@ -588,10 +602,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         imv.setImageBitmap(bMapRotate);
     }
 
-    String[] items={"強度平衡", "水平構圖","三分構圖","消失點構圖"};
-    boolean[] selection={false, false, false, false};
-    public boolean[] select(View v){
-
+    public boolean[] select(){
         AlertDialog.Builder dialog=new AlertDialog.Builder(this);
         dialog.setTitle("選擇構圖")
 
