@@ -12,7 +12,17 @@
         android:layout_height="match_parent"
         android:layout_below="@id/tab"
         />
-
+    <Button
+        android:id="@+id/reference"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignRight="@id/btn_selectMode"
+        android:layout_alignBottom="@id/surface_view_camera2_activity"
+        android:layout_marginBottom="150dp"
+        android:background="@drawable/bg_button"
+        android:onClick="onClick"
+        android:text="R"
+        android:visibility="gone"/>
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/mViewPager"
@@ -113,6 +123,14 @@
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
         android:onClick="onClick"
+        android:scaleType="centerCrop"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/recommedImg_show"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
         android:scaleType="centerCrop"
         android:visibility="gone" />
 

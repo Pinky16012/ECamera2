@@ -69,6 +69,8 @@ import java.util.Arrays;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     public int itemPosition =1;
+    public Bitmap recommendImg ;
+    private ImageView img_recommend;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,12 +115,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if(itemPosition ==0){
                     selectMode_btn.setVisibility(View.GONE);
 //                    selectPose_btn.setVisibility(View.GONE);
+                    reference.setVisibility(View.GONE);
                 }else if(itemPosition == 1){
                     selectMode_btn.setVisibility(View.VISIBLE);
 //                    selectPose_btn.setVisibility(View.GONE);
                 }else{
 //                    selectPose_btn.setVisibility(View.VISIBLE);
                     selectMode_btn.setVisibility(View.GONE);
+                    reference.setVisibility(View.GONE);
                 }
             }
 
@@ -140,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ORIENTATIONS.append(Surface.ROTATION_180, 270);
         ORIENTATIONS.append(Surface.ROTATION_270, 180);
     }
-
+    private Button reference;
     /*********************拍照畫面*******************/
     private SurfaceView mSurfaceView;
     private SurfaceHolder mSurfaceHolder;
@@ -204,6 +208,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initVIew() {
+        reference = (Button) findViewById(R.id.reference);
+        img_recommend = (ImageView) findViewById(R.id.recommedImg_show);
 
         iv_show = (ImageView) findViewById(R.id.iv_show_camera2_activity);   //拍照完顯示
         b_re = (Button) findViewById(R.id.repreview);       //回拍照畫面按鈕
@@ -304,6 +310,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 bSurfaceView.setVisibility(View.GONE);
                 album_btn.setVisibility(View.GONE);
 //                btn_selectMode.setVisibility(View.GONE);
+                img_recommend.setVisibility(View.GONE);
+                reference.setVisibility(View.GONE);
                 imv.setVisibility(View.GONE);
                 b_re.setVisibility(View.VISIBLE);
                 iv_show.setVisibility(View.VISIBLE);
@@ -366,6 +374,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                         i.selectMode(bMapRotate,m,selection,MainActivity.this,checkRecommend);
                         checkRecommend = i.getCheckRecommendValue();
+                        recommendImg = i.getRecommendImg();
                     }
 
                     /**************廣播****************/
@@ -485,6 +494,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btn_selectMode:
                 select();
                 break;
+            case  R.id.reference:
+                img_recommend.setImageBitmap(recommendImg);
+                mSurfaceView.setVisibility(View.GONE);
+                bSurfaceView.setVisibility(View.GONE);
+    //            selectMode_btn.setVisibility(View.GONE);
+                reference.setVisibility(View.GONE);
+                iv_show.setVisibility(View.GONE);
+                imv.setVisibility(View.GONE);
+                b_re.setVisibility(View.VISIBLE);
+                img_recommend.setVisibility(View.VISIBLE);
 
         }
     }
@@ -493,9 +512,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         bSurfaceView.setVisibility(View.VISIBLE);
         album_btn.setVisibility(View.VISIBLE);
         //btn_selectMode.setVisibility(View.VISIBLE);
+        if(checkRecommend == 1){
+            reference.setVisibility(View.VISIBLE);
+        }else{
+            reference.setVisibility(View.GONE);
+        }
         b_re.setVisibility(View.GONE);
         imv.setVisibility(View.GONE);
         iv_show.setVisibility(View.GONE);
+        img_recommend.setVisibility(View.GONE);
 
 
     }
@@ -577,6 +602,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         iv_show.setVisibility(View.GONE);
         b_re.setVisibility(View.VISIBLE);
         imv.setVisibility(View.VISIBLE);
+        img_recommend.setVisibility(View.GONE);
 
         //create a bitMap
         Bitmap bitmap1 = Bitmap.createBitmap(image.cols(), image.rows(), Bitmap.Config.RGB_565);
@@ -617,7 +643,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 .setPositiveButton("確定", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {}
+                    public void onClick(DialogInterface dialogInterface, int i) {checkRecommend = 0; reference.setVisibility(View.GONE);}
                 })
                 .setNegativeButton("取消", new DialogInterface.OnClickListener() {
                     @Override

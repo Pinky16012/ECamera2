@@ -82,24 +82,11 @@ public class Pager1 extends RelativeLayout{
 
 
         Double score[] ={0.0,0.0,0.0,0.0,0.0};
-//        Double IBscore = 0.0;
-//        Double Hscore = 0.0;
-//        Double Rscore = 0.0;
-//        Double VPscore = 0.0;
-//        Double Fscore = 0.0;
 
         String SScore[] = {null,null,null,null,null};
-//        String SIBscore = null;
-//        String SHscore = null;
-//        String SRscore = null;
-//        String SVPscore = null;
-//        String SFscore = null;
 
         if(checkRecommend == 0){
-            new AlertDialog.Builder(context)
-                    .setTitle("checkRecommend == 0")
-                    .setMessage("0")
-                    .show();
+
             for(int a = 0;a <=4 ;a++){   //得到分數
                 if(check[a] == true){
                     if(a == 0){
@@ -200,14 +187,7 @@ public class Pager1 extends RelativeLayout{
         }else
             selectRecommend(highestComposition,highest,bitmap,img,context);
 
-//        if(checkRecommend == 1){
-//            i.getIBscore(bitmap);
-//            h.horizontal_composition(bitmap);
-//            r.rotMain(bitmap);
-//            v.vanishpoint(img);
-//            //frame
-//            selectRecommend(highestComposition,highest,bitmap,img,context);
-//        }
+
     }
 
     public void selectRecommend(int a,double score,Bitmap bitmap1,Mat img1,Context context){
@@ -247,12 +227,12 @@ public class Pager1 extends RelativeLayout{
             moveCorrect = false;
             new AlertDialog.Builder(context)
                     .setTitle("恭喜!")
-                    .setMessage("這是一張符合構圖的照片11111")
+                    .setMessage("這是一張符合構圖的照片")
                     .show();
         }else if (checkRecommend == 1 && moveCorrect == false){
             new AlertDialog.Builder(context)
-                    .setTitle("移動構圖")
-                    .setMessage("11111")
+                    .setTitle("矯正失敗")
+                    .setMessage("請在試一次")
                     .show();
         }
         else if(checkRecommend == 0){
@@ -289,4 +269,6 @@ public class Pager1 extends RelativeLayout{
     public int getCheckRecommendValue(){
         return checkRecommend;
     }
+
+    public Bitmap getRecommendImg() {return recommendImg; }
 }
