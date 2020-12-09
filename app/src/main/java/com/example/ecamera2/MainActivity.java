@@ -71,8 +71,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public int itemPosition =1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        getPermissions();
         super.onCreate(savedInstanceState);
+        getPermissions();
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);  //強制豎屏
         iniLoadOpenCV();

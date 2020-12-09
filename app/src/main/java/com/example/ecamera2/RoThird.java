@@ -161,7 +161,7 @@ public class RoThird {
         Utils.bitmapToMat(temBitmap, temMat);
 
         //drawLine
-        Imgproc.rectangle(temMat, new Point(Center.x + (temMat.width()/ 16), Center.y + (temMat.height()/ 16)), new Point(Center.x - (temMat.width()/ 16), Center.y - (temMat.height()/ 16)), new Scalar(0, 255, 255), 10);
+        Imgproc.rectangle(temMat, new Point(Center.x + (temMat.width()/ 16), Center.y + (temMat.height()/ 16)), new Point(Center.x - (temMat.width()/ 16), Center.y - (temMat.height()/ 16)), new Scalar(227, 23, 13), 10);
         Imgproc.rectangle(temMat, new Point(checkPoint.x + (temMat.width()/ 16), checkPoint.y + (temMat.height()/ 16)), new Point(checkPoint.x - (temMat.width()/ 16), checkPoint.y - (temMat.height()/ 16)), new Scalar(0, 0, 255), 10);
 
         Utils.matToBitmap(temMat, temBitmap);
