@@ -75,8 +75,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);  //強制豎屏
         iniLoadOpenCV();
-        viewpager();
         initVIew();
+        viewpager();
 
         setStatusBar();
 
@@ -112,12 +112,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 itemPosition = position;
                 if(itemPosition ==0){
                     selectMode_btn.setVisibility(View.GONE);
-                    selectPose_btn.setVisibility(View.GONE);
+//                    selectPose_btn.setVisibility(View.GONE);
                 }else if(itemPosition == 1){
                     selectMode_btn.setVisibility(View.VISIBLE);
-                    selectPose_btn.setVisibility(View.GONE);
+//                    selectPose_btn.setVisibility(View.GONE);
                 }else{
-                    selectPose_btn.setVisibility(View.VISIBLE);
+//                    selectPose_btn.setVisibility(View.VISIBLE);
                     selectMode_btn.setVisibility(View.GONE);
                 }
             }
@@ -225,6 +225,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         p.setAntiAlias(true);					  // bSurfaceView設置白色設置畫筆的鋸齒效果。 true是去除。
         p.setColor(Color.WHITE);				 // bSurfaceView設置白色
         p1.setAntiAlias(true);
+        p1.setColor(Color.BLACK);
 
         mSurfaceHolder.setKeepScreenOn(true);    // mSurfaceView添加回调
         bSurfaceHolder.setKeepScreenOn(true);   // bSurfaceView添加回调
@@ -240,7 +241,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 canvas = holder.lockCanvas();
                 // 1.鎖住畫布
+                canvas.drawCircle(bSurfaceView.getWidth()/2, bSurfaceView.getHeight()/2, 115f, p1);
                 canvas.drawCircle(bSurfaceView.getWidth()/2, bSurfaceView.getHeight()/2, 100f, p);
+                System.out.println(bSurfaceView.getWidth());
+                System.out.println(bSurfaceView.getHeight());
                 // 2.在畫布上貼圖
                 holder.unlockCanvasAndPost(canvas);
                 // 3.解鎖並PO出畫布

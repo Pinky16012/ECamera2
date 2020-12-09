@@ -6,15 +6,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class Pager2 extends RelativeLayout implements View.OnClickListener {
 
-    Button btn1, btn2, btn3, btn4, btn5, btn6, btnScroll;
+
+    ImageButton btn1, btn2, btn3, btn4, btn5, btn6 ,btnScroll;
+    ImageView showImg;
     Boolean openOrnot = false;
     HorizontalScrollView posScroll;
-    TextView textView;
+    int recordBtn;
 
     public Pager2(Context context) {
         super(context);
@@ -29,7 +33,8 @@ public class Pager2 extends RelativeLayout implements View.OnClickListener {
         btn4 = view.findViewById(R.id.btn4);
         btn5 = view.findViewById(R.id.btn5);
         btn6 = view.findViewById(R.id.btn6);
-        btnScroll = view.findViewById(R.id.btnScroll);
+        btnScroll = view.findViewById(R.id.btn_selectPose1);
+        showImg = view.findViewById(R.id.showImg);
 
         posScroll = view.findViewById(R.id.posScroll);
         posScroll.setVisibility(INVISIBLE);
@@ -48,25 +53,31 @@ public class Pager2 extends RelativeLayout implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
+        if(v.getId() == recordBtn){
+            showImg.setVisibility(INVISIBLE);
+            recordBtn = -1;
+            return;
+        }
+        showImg.setVisibility(VISIBLE);
         if(v.getId() == R.id.btn1){
-            textView.setText(btn1.getText());
+            showImg.setImageResource(R.drawable.test);
         }
         if(v.getId() == R.id.btn2){
-            textView.setText(btn2.getText());
+            showImg.setImageResource(R.drawable.test); //改圖片
         }
         if(v.getId() == R.id.btn3){
-            textView.setText(btn3.getText());
+            showImg.setImageResource(R.drawable.test); //改圖片
         }
         if(v.getId() == R.id.btn4){
-            textView.setText(btn4.getText());
+            showImg.setImageResource(R.drawable.test); //改圖片
         }
         if(v.getId() == R.id.btn5){
-            textView.setText(btn5.getText());
+            showImg.setImageResource(R.drawable.test); //改圖片
         }
         if(v.getId() == R.id.btn6){
-            textView.setText(btn6.getText());
+            showImg.setImageResource(R.drawable.test); //改圖片
         }
-        if(v.getId() == R.id.btnScroll){
+        if(v.getId() == R.id.btn_selectPose1){
             if(!openOrnot){
                 posScroll.setVisibility(VISIBLE);
                 openOrnot = true;
@@ -76,5 +87,6 @@ public class Pager2 extends RelativeLayout implements View.OnClickListener {
                 openOrnot = false;
             }
         }
+        recordBtn = v.getId();
     }
 }

@@ -2,15 +2,17 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_centerHorizontal="true"
-        android:text="3" />
+
+
+    <ImageView
+        android:id="@+id/showImg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="125dp"
+        android:scaleType="fitStart" />
 
     <HorizontalScrollView
         android:id="@+id/posScroll"
@@ -23,53 +25,74 @@
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
-            <Button
+            <ImageButton
                 android:id="@+id/btn1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="pos1" />
+                android:layout_width="70dp"
+                android:layout_height="100dp"
+                android:scaleType="fitStart"
+                android:background="#000000"
+                app:srcCompat="@drawable/test" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/btn2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="pos2" />
+                android:layout_width="70dp"
+                android:layout_height="100dp"
+                android:layout_marginLeft="20dp"
+                android:background="#000000"
+                android:scaleType="fitStart"
+                app:srcCompat="@drawable/test" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/btn3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="pos3" />
+                android:layout_width="70dp"
+                android:layout_height="100dp"
+                android:layout_marginLeft="20dp"
+                android:background="#000000"
+                android:scaleType="fitStart"
+                app:srcCompat="@drawable/test" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/btn4"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="pos4" />
+                android:layout_width="70dp"
+                android:layout_height="100dp"
+                android:layout_marginLeft="20dp"
+                android:background="#000000"
+                android:scaleType="fitStart"
+                app:srcCompat="@drawable/test" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/btn5"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="pos5" />
+                android:layout_width="70dp"
+                android:layout_height="100dp"
+                android:layout_marginLeft="20dp"
+                android:background="#000000"
+                android:scaleType="fitStart"
+                app:srcCompat="@drawable/test" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/btn6"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="pos6" />
+                android:layout_width="70dp"
+                android:layout_height="100dp"
+                android:layout_marginLeft="20dp"
+                android:background="#000000"
+                android:scaleType="fitStart"
+                app:srcCompat="@drawable/test" />
         </LinearLayout>
     </HorizontalScrollView>
 
-    <Button
-        android:id="@+id/btnScroll"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+
+    <ImageButton
+        android:id="@+id/btn_selectPose1"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-        android:layout_centerInParent="false"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="10dp"
-        android:text="posMenu" />
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="5dp"
+        android:background="#00000000"
+        android:onClick="onClick"
+        android:scaleType="fitStart"
+        android:visibility="visible"
+        app:srcCompat="@drawable/selectmode_icon" />
 
 </RelativeLayout>
