@@ -119,6 +119,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     reference.setVisibility(View.GONE);
                 }else if(itemPosition == 1){
                     selectMode_btn.setVisibility(View.VISIBLE);
+                    checkRecommend = 0;
+                    setSelection();
 //                    selectPose_btn.setVisibility(View.GONE);
                 }else{
 //                    selectPose_btn.setVisibility(View.VISIBLE);
@@ -372,10 +374,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Utils.bitmapToMat(bMapRotate,m,true);
 
                     if(itemPosition == 1){    //當是構圖模式
+                        int selected = getSelection();
+                        if(selected == 1){
+                            i.selectMode(bMapRotate,m,selection,MainActivity.this,checkRecommend);
+                            checkRecommend = i.getCheckRecommendValue();
+                            recommendImg = i.getRecommendImg();
+                        }
 
-                        i.selectMode(bMapRotate,m,selection,MainActivity.this,checkRecommend);
-                        checkRecommend = i.getCheckRecommendValue();
-                        recommendImg = i.getRecommendImg();
                     }
 
                     /**************廣播****************/
@@ -513,7 +518,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         bSurfaceView.setVisibility(View.VISIBLE);
         album_btn.setVisibility(View.VISIBLE);
         //btn_selectMode.setVisibility(View.VISIBLE);
-        if(checkRecommend == 1){
+        int selected = getSelection();
+        if(checkRecommend == 1 && selected == 1 ){
             reference.setVisibility(View.VISIBLE);
         }else{
             reference.setVisibility(View.GONE);
@@ -657,6 +663,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(ActivityCompat.checkSelfPermission(this,Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.CAMERA},1);
+        }
+    }
+
+    private int getSelection(){
+        for(int a = 0;a < 4;a++){
+            if(selection[a] == true){
+                return 1;
+            }
+        }
+        return 0;
+    }
+
+    private void setSelection(){
+        for(int a = 0;a < 4;a++){
+            selection[a] = false;
         }
     }
 }
