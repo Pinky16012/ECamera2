@@ -381,7 +381,7 @@ public class vanishpoint  {
         r1.y = pt_xy.get(minNo_pt_xy).y - img.height() / 16;
         r2.x = pt_xy.get(minNo_pt_xy).x + img.width() / 16;
         r2.y = pt_xy.get(minNo_pt_xy).y + img.height() / 16;
-        Imgproc.rectangle(img, r1, r2, new Scalar(0, 255, 255), 20);
+        Imgproc.rectangle(img, r1, r2, new Scalar(227, 23, 13), 20);
 
         //畫出照片中心
         r1.x = img.width() / 16 * 7;
