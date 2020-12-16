@@ -14,7 +14,7 @@ import android.widget.TextView;
 public class Pager2 extends RelativeLayout implements View.OnClickListener {
 
 
-    ImageButton btn1, btn2, btn3, btn4, btn5, btn6 ,btnScroll;
+    ImageButton btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9 ,btnScroll;
     ImageView showImg;
     Boolean openOrnot = false;
     HorizontalScrollView posScroll;
@@ -33,6 +33,9 @@ public class Pager2 extends RelativeLayout implements View.OnClickListener {
         btn4 = view.findViewById(R.id.btn4);
         btn5 = view.findViewById(R.id.btn5);
         btn6 = view.findViewById(R.id.btn6);
+        btn7 = view.findViewById(R.id.btn7);
+        btn8 = view.findViewById(R.id.btn8);
+        btn9 = view.findViewById(R.id.btn9);
         btnScroll = view.findViewById(R.id.btn_selectPose1);
         showImg = view.findViewById(R.id.showImg);
 
@@ -45,6 +48,9 @@ public class Pager2 extends RelativeLayout implements View.OnClickListener {
         btn4.setOnClickListener(this);
         btn5.setOnClickListener(this);
         btn6.setOnClickListener(this);
+        btn7.setOnClickListener(this);
+        btn8.setOnClickListener(this);
+        btn9.setOnClickListener(this);
         btnScroll.setOnClickListener(this);
 
         addView(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
@@ -60,22 +66,31 @@ public class Pager2 extends RelativeLayout implements View.OnClickListener {
         }
         showImg.setVisibility(VISIBLE);
         if(v.getId() == R.id.btn1){
-            showImg.setImageResource(R.drawable.test);
+            showImg.setImageResource(R.drawable.p_a);
         }
         if(v.getId() == R.id.btn2){
-            showImg.setImageResource(R.drawable.test); //改圖片
+            showImg.setImageResource(R.drawable.p_b); //改圖片
         }
         if(v.getId() == R.id.btn3){
-            showImg.setImageResource(R.drawable.test); //改圖片
+            showImg.setImageResource(R.drawable.p_c); //改圖片
         }
         if(v.getId() == R.id.btn4){
-            showImg.setImageResource(R.drawable.test); //改圖片
+            showImg.setImageResource(R.drawable.p_d); //改圖片
         }
         if(v.getId() == R.id.btn5){
-            showImg.setImageResource(R.drawable.test); //改圖片
+            showImg.setImageResource(R.drawable.p_e); //改圖片
         }
         if(v.getId() == R.id.btn6){
-            showImg.setImageResource(R.drawable.test); //改圖片
+            showImg.setImageResource(R.drawable.p_f); //改圖片
+        }
+        if(v.getId() == R.id.btn7){
+            showImg.setImageResource(R.drawable.p_g); //改圖片
+        }
+        if(v.getId() == R.id.btn8){
+            showImg.setImageResource(R.drawable.p_h); //改圖片
+        }
+        if(v.getId() == R.id.btn9){
+            showImg.setImageResource(R.drawable.p_i); //改圖片
         }
         if(v.getId() == R.id.btn_selectPose1){
             if(!openOrnot){
