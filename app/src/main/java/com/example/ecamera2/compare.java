@@ -28,7 +28,7 @@ public class compare {
         Imgproc.calcHist(Arrays.asList(sourceMat), new MatOfInt(0), new Mat(), sourceMat, histSize, ranges);
         Imgproc.calcHist(Arrays.asList(templateMat), new MatOfInt(0), new Mat(), templateMat, histSize, ranges);
         double res = Imgproc.compareHist(sourceMat, templateMat, Imgproc.CV_COMP_CORREL);
-        if(res > 0.7){
+        if(res > 0.6){
             good = true;
         }
         return good;
