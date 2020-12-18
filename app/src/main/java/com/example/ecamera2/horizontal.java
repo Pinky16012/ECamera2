@@ -2,6 +2,7 @@ package com.example.ecamera2;
 
 
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
 
 import org.opencv.android.Utils;
 import org.opencv.core.Core;
@@ -9,6 +10,7 @@ import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
+import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgcodecs.Imgcodecs;
@@ -161,10 +163,53 @@ public class horizontal {
         //drawline
         calVertex();
         Imgproc.polylines(temMat, vertex, true, new Scalar(0, 255, 255), 10);
-        Imgproc.line(temMat, new Point(Lpoint[0], Lpoint[1]), new Point(Lpoint[2], Lpoint[3]), new Scalar(255, 255, 255), 10);
+//        Imgproc.line(temMat, new Point(Lpoint[0], Lpoint[1]), new Point(Lpoint[2], Lpoint[3]), new Scalar(255, 255, 255), 10);
         Imgproc.rectangle(temMat, new Point(Lpoint[0], Lpoint[1]), new Point(Lpoint[0] + (temMat.width()/8), Lpoint[1] + temMat.height()/8), new Scalar(0, 0, 255), 10);
 
         Utils.matToBitmap(temMat, temBitmap);
+
         return temBitmap;
+    }
+
+    public Mat pictureCut(Mat tem, Bitmap temBitmap){
+        int[] point = new int[2];
+
+        int disHeight = 480;
+        int disWidth = 270;
+        Rect rect;
+        Utils.matToBitmap(tem ,temBitmap);
+        Matrix matrix = new Matrix();
+
+        matrix.reset();
+
+        matrix.postRotate((float)Theta);
+        temBitmap = Bitmap.createBitmap(temBitmap, 0, 0, temBitmap.getWidth(), temBitmap.getHeight(),matrix, true);
+        Point temPoint = new Point();
+        temPoint.x = Lpoint[0] * Math.acos(Theta) - Lpoint[1] *Math.asin(Theta);
+        temPoint.y = Lpoint[1] * Math.asin(Theta) + Lpoint[0] *Math.acos(Theta);
+
+        Utils.bitmapToMat(temBitmap, tem);
+        point[0] = (int) temPoint.x;
+        point[1] = (int) temPoint.y;
+
+        if(point[0] < 0|| point[1] < 0)
+            rect = new Rect(0, 0,disWidth, disHeight);
+        else if((point[0] - disWidth/2 ) < 0|| (point[1] - disHeight/2 ) <0)
+            rect = new Rect(point[0], point[1], disWidth , disHeight);
+        else if ((point[0] + disWidth/2 ) > tem.width()|| (point[1] + disHeight/2 ) > tem.height())
+            rect = new Rect(tem.width() -disWidth -1,tem.height() - disHeight -1, disWidth, disHeight);
+        else
+            rect = new Rect(point[0] - disWidth/2, point[1] - disHeight/2, disWidth, disHeight);
+        Mat result = new Mat(tem, rect);
+
+        return new Mat(tem, rect);
+    }
+
+    public Point returnDisP(){
+        Point point = new Point();
+        point.x = Lpoint[0];
+        point.y = Lpoint[1];
+
+        return point;
     }
 }
