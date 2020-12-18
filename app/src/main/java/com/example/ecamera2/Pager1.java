@@ -22,12 +22,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Pager1 extends RelativeLayout{
-    String[] items={"強度平衡", "水平構圖","三分構圖","消失點構圖","相框構圖"};
+    String[] items={"強度平衡", "水平構圖","三分構圖","消失點構圖"};
     private int checkRecommend = 0;
     private Context context1;
     private Mat template = new Mat();
     private Point origP = new Point();
     private Point DistinationP = new Point();
+    private Mat horizonMat = new Mat();
+
+    private int counter = 0;
 
     List<String> Score = new ArrayList<>();
     View view;
@@ -53,6 +56,7 @@ public class Pager1 extends RelativeLayout{
     boolean vp;
     boolean frame;
     private Bitmap recommendImg;
+    private Bitmap outputImg;
     private ImageView img_recommend;
     boolean moveCorrect = false;
 
@@ -65,18 +69,19 @@ public class Pager1 extends RelativeLayout{
     private int highestComposition = 0;
     private double highest = 0.0;
 
-    public void selectMode(Bitmap bitmap, Mat img,boolean check[],Context context,int checkRecommend_){
+    public void selectMode(Bitmap bitmap, Mat img,boolean check[],Context context,int checkRecommend_,int counter_){
         ib = check[0];
         horizontal = check[1];
         third = check[2];
         vp = check[3];
-        frame = check[4];
         checkRecommend = checkRecommend_;
+        counter = counter_;
         String nameofcom = new String();
         final IB i = new IB();
         final horizontal h = new horizontal();
         final RoThird r = new RoThird();
         final vanishpoint v = new vanishpoint();
+        final framewithframe frame = new framewithframe();
         //宣告frame
 
 
@@ -111,6 +116,7 @@ public class Pager1 extends RelativeLayout{
                         Score.add(nameofcom);
 
                     }else if(a == 4){
+//                        outputImg = frame.frameCal(bitmap);
 //                        score[4] = i.getIBscore(bitmap); //改為frame
 //                        SScore[4] = changeType(score[4]);
                     }
@@ -196,9 +202,15 @@ public class Pager1 extends RelativeLayout{
         final RoThird r = new RoThird();
         final vanishpoint v = new vanishpoint();
 //        final compare c = new compare();
+        if (counter >= 5){checkRecommend = 2; moveCorrect = false;}
         if(checkRecommend == 1){
+            counter += 1;
             //判斷移動相機是否正確
             if(a == 1){   //水平構圖
+                double temscore = h.horizontal_composition(bitmap1);
+                if (temscore >= 90){
+                    moveCorrect = true;
+                }
 
             }else if(a == 2){   //三分構圖
                 Mat tem_img = new Mat();
@@ -225,6 +237,7 @@ public class Pager1 extends RelativeLayout{
         }else if(checkRecommend == 1 && moveCorrect == true){
             checkRecommend = 0;
             moveCorrect = false;
+            counter = 0;
             new AlertDialog.Builder(context)
                     .setTitle("恭喜!")
                     .setMessage("這是一張符合構圖的照片")
@@ -240,7 +253,10 @@ public class Pager1 extends RelativeLayout{
 
                 if(checkRecommend == 0){
                     h.horizontal_composition(bitmap1);
+                    horizonMat = h.pictureCut(img1, bitmap1);
+                    DistinationP= h.returnDisP();
                     recommendImg = h.recommend(bitmap1); //水平構圖
+
                 }
             }else if(a == 2){
                 if(checkRecommend == 0){
@@ -264,6 +280,13 @@ public class Pager1 extends RelativeLayout{
 
             }
             checkRecommend = 1;
+        }else if (checkRecommend == 2){
+            new AlertDialog.Builder(context)
+                    .setTitle("矯正失敗")
+                    .setMessage("請您再次選擇構圖")
+                    .show();
+            checkRecommend = 0;
+            counter = 0;
         }
     }
     public int getCheckRecommendValue(){
@@ -271,4 +294,6 @@ public class Pager1 extends RelativeLayout{
     }
 
     public Bitmap getRecommendImg() {return recommendImg; }
+
+    public int getCounter(){ return  counter;}
 }
