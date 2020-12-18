@@ -71,6 +71,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public int itemPosition =1;
     public Bitmap recommendImg ;
     private ImageView img_recommend;
+    private int counter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -163,7 +164,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     /*********************開啟相簿按鈕*******************/
 
     /*********************選擇模式按鈕*******************/
-    String[] items={"強度平衡", "水平構圖","三分構圖","消失點構圖","相框構圖"};
+    String[] items={"強度平衡", "水平構圖","三分構圖","消失點構圖"};
     boolean[] selection={false, false, false, false,false};
     /*********************選擇模式按鈕*******************/
 
@@ -376,9 +377,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     if(itemPosition == 1){    //當是構圖模式
                         int selected = getSelection();
                         if(selected == 1){
-                            i.selectMode(bMapRotate,m,selection,MainActivity.this,checkRecommend);
+                            i.selectMode(bMapRotate,m,selection,MainActivity.this,checkRecommend,counter);
                             checkRecommend = i.getCheckRecommendValue();
                             recommendImg = i.getRecommendImg();
+                            counter = i.getCounter();
                         }
 
                     }
@@ -650,7 +652,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 .setPositiveButton("確定", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {checkRecommend = 0; reference.setVisibility(View.GONE);}
+                    public void onClick(DialogInterface dialogInterface, int i) {checkRecommend = 0; reference.setVisibility(View.GONE);counter = 0;}
                 })
                 .setNegativeButton("取消", new DialogInterface.OnClickListener() {
                     @Override
