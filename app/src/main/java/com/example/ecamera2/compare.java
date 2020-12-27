@@ -45,14 +45,18 @@ public class compare {
         Rect rect;
         if(point[0] < 0|| point[1] < 0)
             rect = new Rect(0, 0,disWidth, disHeight);
-        else if((point[0] - disWidth/2 ) < 0|| (point[1] - disHeight/2 ) <0)
-            rect = new Rect(point[0], point[1], disWidth , disHeight);
+        else if((point[0] - disWidth/2 ) < 0|| (point[1] - disHeight/2 ) <0) {
+            if(point[0] + disWidth > tem.width())
+                rect = new Rect(tem.width() -disWidth -1, point[1], disWidth, disHeight);
+            else if (point[1] + disHeight > tem.height())
+                rect = new Rect(point[0], point[1] - disHeight -1, disWidth, disHeight);
+            rect = new Rect(point[0], point[1], disWidth, disHeight);
+        }
         else if ((point[0] + disWidth/2 ) > tem.width()|| (point[1] + disHeight/2 ) > tem.height())
             rect = new Rect(tem.width() -disWidth -1,tem.height() - disHeight -1, disWidth, disHeight);
         else
             rect = new Rect(point[0] - disWidth/2, point[1] - disHeight/2, disWidth, disHeight);
 //        Mat result = new Mat(tem, rect);
-
         return new Mat(tem, rect);
     }
     /*****************移動特徵點*****************/

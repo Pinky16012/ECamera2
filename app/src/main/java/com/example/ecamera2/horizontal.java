@@ -60,7 +60,7 @@ public class horizontal {
 
             theta = azimuthAngle(x1, y1, x2, y2);
             //If 30 >theta >= 0 or  180 > theta >= 150, drawing lines on an image
-            if((theta >= 0 && theta <= 30) || (theta >= 150 && theta <= 180)){
+            if((theta >= 0 && theta <= 30) || (theta >= 150 && theta <= 180) || (theta >= 60 && theta <= 120)){
                 double temDis = Distance(x1, y1, x2, y2);
                 Point pt1 = new Point(x1, y1);
                 Point pt2 = new Point(x2, y2);
@@ -91,6 +91,17 @@ public class horizontal {
         double theta = 0.0, tem_Score;
         theta = azimuthAngle(Lpoint[0], Lpoint[1], Lpoint[2], Lpoint[3]);
         Theta = Math.toRadians(theta);
+        if(theta > 30)
+            if (theta <= 90)
+                theta = 90 - theta;
+            else if(theta > 90)
+                if (theta > 150)
+                    theta = 180 -theta;
+                else
+                    theta = theta - 90;
+
+        System.out.println("theta"+theta);
+        System.out.println("Theta"+Theta);
         tem_Score = 100 - (theta / 30) * 100;
         BigDecimal b = new BigDecimal(tem_Score);
         Score = b.setScale(2, BigDecimal.ROUND_HALF_DOWN).doubleValue();
@@ -131,21 +142,44 @@ public class horizontal {
     }
 
     /*********************計算要畫出的方形位置************************/
-    private void calVertex(){
+    private void calVertex() {
         Point a, b, c, d;           //方形四個頂點
         double width = tem_img.width() / 8;
         double height = tem_img.height() / 8;
-
-        if(Lpoint[1] <= Lpoint[3]) {
-            a = new Point(Lpoint[0], Lpoint[1]);
-            b = new Point(Lpoint[0] + (Math.cos(Theta) * width), Lpoint[1] + (Math.sin(Theta) * width));
-            c = new Point(b.x - (Math.sin(Theta) * height), b.y + (Math.cos(Theta) * height));
-            d = new Point(a.x - (Math.sin(Theta) * height), a.y + (Math.cos(Theta) * height));
-        }else {
-            a = new Point(Lpoint[0], Lpoint[1]);
-            b = new Point(Lpoint[0] + (Math.cos(Theta) * width), Lpoint[1] - (Math.sin(Theta) * width));
-            c = new Point(b.x + (Math.sin(Theta) * height), b.y + (Math.cos(Theta) * height));
-            d = new Point(a.x + (Math.sin(Theta) * height), a.y + (Math.cos(Theta) * height));
+        double theta = azimuthAngle(Lpoint[0], Lpoint[1], Lpoint[2], Lpoint[3]);
+        if (theta >= 60 && theta <= 120){
+            if (theta <= 90)
+                theta = 90 - theta;
+            else if(theta > 90)
+                if (theta > 150)
+                    theta = 180 -theta;
+                else
+                    theta = theta - 90;
+            double Theta2= Math.toRadians(theta);
+            if (Lpoint[1] <= Lpoint[3]) {
+                a = new Point(Lpoint[0], Lpoint[1]);
+                d = new Point(Lpoint[0] + (Math.sin(Theta2) * height), Lpoint[1] + (Math.cos(Theta2) * height));
+                b = new Point(a.x - (Math.cos(Theta2) * width), a.y + (Math.sin(Theta2) * width));
+                c = new Point(b.x + (Math.sin(Theta2) * height), b.y + (Math.cos(Theta2) * height));
+            } else {
+                a = new Point(Lpoint[0], Lpoint[1]);
+                b = new Point(Lpoint[0] - (Math.cos(Theta) * height), Lpoint[1] + (Math.sin(Theta) * height));
+                c = new Point(b.x - (Math.sin(Theta) * width), b.y - (Math.cos(Theta) * width));
+                d = new Point(a.x - (Math.sin(Theta) * width), a.y - (Math.cos(Theta) * width));
+            }
+         }
+        else {
+            if (Lpoint[1] <= Lpoint[3]) {
+                a = new Point(Lpoint[0], Lpoint[1]);
+                b = new Point(Lpoint[0] + (Math.cos(Theta) * width), Lpoint[1] + (Math.sin(Theta) * width));
+                c = new Point(b.x - (Math.sin(Theta) * height), b.y + (Math.cos(Theta) * height));
+                d = new Point(a.x - (Math.sin(Theta) * height), a.y + (Math.cos(Theta) * height));
+            } else {
+                a = new Point(Lpoint[0], Lpoint[1]);
+                b = new Point(Lpoint[0] + (Math.cos(Theta) * width), Lpoint[1] - (Math.sin(Theta) * width));
+                c = new Point(b.x + (Math.sin(Theta) * height), b.y + (Math.cos(Theta) * height));
+                d = new Point(a.x + (Math.sin(Theta) * height), a.y + (Math.cos(Theta) * height));
+            }
         }
         System.out.println(Math.cos(Theta)* width);
         System.out.println(Theta);
@@ -159,12 +193,20 @@ public class horizontal {
     public Bitmap recommend(Bitmap temBitmap){
         Mat temMat = new Mat();
         Utils.bitmapToMat(temBitmap, temMat);
+        double theta = azimuthAngle(Lpoint[0], Lpoint[1], Lpoint[2], Lpoint[3]);
 
         //drawline
         calVertex();
-        Imgproc.polylines(temMat, vertex, true, new Scalar(0, 255, 255), 10);
+        Imgproc.polylines(temMat, vertex, true, new Scalar(227, 23, 13), 10);
 //        Imgproc.line(temMat, new Point(Lpoint[0], Lpoint[1]), new Point(Lpoint[2], Lpoint[3]), new Scalar(255, 255, 255), 10);
-        Imgproc.rectangle(temMat, new Point(Lpoint[0], Lpoint[1]), new Point(Lpoint[0] + (temMat.width()/8), Lpoint[1] + temMat.height()/8), new Scalar(0, 0, 255), 10);
+
+
+
+        if (theta >= 60 && theta <= 120)
+            Imgproc.rectangle(temMat, new Point(Lpoint[0], Lpoint[1]), new Point(Lpoint[0] - (temMat.width()/8), Lpoint[1] + temMat.height()/8), new Scalar(0, 0, 255), 10);
+        else
+            Imgproc.rectangle(temMat, new Point(Lpoint[0], Lpoint[1]), new Point(Lpoint[0] + (temMat.width()/8), Lpoint[1] + temMat.height()/8), new Scalar(0, 0, 255), 10);
+            Imgproc.polylines(temMat, vertex, true, new Scalar(227, 23, 13), 10);
 
         Utils.matToBitmap(temMat, temBitmap);
 
